@@ -1,0 +1,5 @@
+# Ignore IDEA-specific classes and directories
+/.idea
+/out
+/classes
+*.iml
