@@ -46,7 +46,7 @@ public class Main {
                 }
                 if (targetStudent != null) {
                     // Found the student, delete
-                    students.remove(targetNumber);
+                    students.remove(targetStudent);
                     System.out.println("Removed the student with number " + targetNumber + ".");
                     displayStudent(targetStudent, "\t");
                 } else {
