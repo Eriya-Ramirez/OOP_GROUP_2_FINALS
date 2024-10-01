@@ -1,17 +1,17 @@
+import java.util.HashMap;
+import java.util.Map;
+
 public class CourseGrades {
-    private String[] students;
-    private String[] grades;
+    private final Map<Student, Float> grades = new HashMap<>();
 
-    public CourseGrades(String[] students, String[] grades){
-        this.students = students;
-        this.grades = grades;
+    public CourseGrades() {
     }
 
-    public assignGrade(){
-
+    public float getGrade(Student student) {
+        return this.grades.getOrDefault(student, 0F);
     }
-    
-    public viewGrades(){
-        
+
+    public void setGrade(Student student, float grade) {
+        this.grades.put(student, grade);
     }
 }

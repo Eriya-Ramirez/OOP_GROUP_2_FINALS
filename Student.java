@@ -1,31 +1,38 @@
 
 public class Student {
-    private String Name, Gender, degreeProgram;
-    private int studentNo, enrollmentYear;
-    private float enrolledUnits;
+    private String name, gender, degreeProgram;
+    private int studentNo, enrollmentYear, enrolledUnits;
 
-    public Student(String Name, String Gender, String degreeProgram, int studentNo, int enrollmentYear, float enrolledUnits){
-        this.Name = Name;
-        this.Gender = Gender;
+    public Student(String name, String gender, String degreeProgram, int studentNo, int enrollmentYear, int enrolledUnits) {
+        this.name = name;
+        this.gender = gender;
         this.degreeProgram = degreeProgram;
         this.studentNo = studentNo;
         this.enrollmentYear = enrollmentYear;
         this.enrolledUnits = enrolledUnits;
     }
 
-    public void enrollinCourse(){
-
+    public String getName() {
+        return name;
     }
 
-    public void dropCourse(){
-
+    public String getGender() {
+        return gender;
     }
 
-    public void viewCourses(){
-
+    public String getDegreeProgram() {
+        return degreeProgram;
     }
 
-    public void viewGrades(){
+    public int getStudentNo() {
+        return studentNo;
+    }
 
+    public int getEnrollmentYear() {
+        return enrollmentYear;
+    }
+
+    public int getEnrolledUnits() {
+        return enrolledUnits;
     }
 }
