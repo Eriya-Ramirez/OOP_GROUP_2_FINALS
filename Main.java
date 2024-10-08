@@ -6,22 +6,21 @@ import java.util.function.Function;
 
 public class Main {
     public static final Scanner INPUT = new Scanner(System.in);
+    private static final List<Student> students = new ArrayList<>();
 
     public static void main(String[] args) {
-        List<Student> students = new ArrayList<>();
-
         boolean running = true;
         while (running) {
             System.out.println("""
                     
                     = [ Student Management System ] =
-                     [[[ ! WIP. Early prototype. ]]]
+                     [[[ ! Enhanced Version ]]]
                     
                         (1) Add a student
                         (2) Remove a student
-                        (3) Update student details (NYI)
-                        (4) Display all students
-                    
+                        (3) Search by student number
+                        (4) Filter by enrollment year
+                        (5) Display all students
                         (E) Exit program
                     """);
 
@@ -35,38 +34,44 @@ public class Main {
                 students.add(student);
                 System.out.println("Added student!");
             }, "1");
+            // Remove student
             choice.addChoice(() -> {
-                int targetNumber = askInput("Please enter the student number: ", "Please input a valid number", INTEGER_CONVERTER);
-                Student targetStudent = null;
-                for (Student student : students) {
-                    if (student.getStudentNo() == targetNumber) {
-                        targetStudent = student;
-                        break;
-                    }
-                }
+                int targetNumber = askValidInteger("Please enter the student number: ", "Please input a valid number.");
+                Student targetStudent = searchByStudentNo(targetNumber);
                 if (targetStudent != null) {
-                    // Found the student, delete
                     students.remove(targetStudent);
                     System.out.println("Removed the student with number " + targetNumber + ".");
-                    displayStudent(targetStudent, "\t");
                 } else {
                     System.out.println("Could not find a student with number " + targetNumber + ".");
                 }
-                System.out.println("Press enter to continue...");
-                INPUT.nextLine();
             }, "2");
+            // Search by student number
+            choice.addChoice(() -> {
+                int targetNumber = askValidInteger("Enter student number to search: ", "Please input a valid number.");
+                Student student = searchByStudentNo(targetNumber);
+                if (student != null) {
+                    System.out.println("Student found:");
+                    student.showDetails();
+                } else {
+                    System.out.println("Student not found.");
+                }
+            }, "3");
+            // Filter by enrollment year
+            choice.addChoice(() -> {
+                int year = askValidInteger("Enter enrollment year to filter: ", "Please enter a valid year.");
+                List<Student> filteredStudents = filterByEnrollmentYear(year);
+                System.out.println("Found " + filteredStudents.size() + " students enrolled in " + year + ":");
+                for (Student student : filteredStudents) {
+                    student.showDetails();
+                }
+            }, "4");
             // Display all students
             choice.addChoice(() -> {
-                System.out.println("Displaying " + students.size() + " students.");
-                System.out.println();
-                for (int i = 0; i < students.size(); i++) {
-                    System.out.println("#" + (i + 1) + ".");
-                    displayStudent(students.get(i), "\t");
+                System.out.println("Displaying " + students.size() + " students:");
+                for (Student student : students) {
+                    student.showDetails();
                 }
-                System.out.println();
-                System.out.println("Press enter to continue...");
-                INPUT.nextLine();
-            }, "4");
+            }, "5");
 
             String input = choice.run();
 
@@ -78,56 +83,61 @@ public class Main {
         System.out.println("Exiting program.");
     }
 
+    // Add student method with input validation
     public static Student addStudent() {
         System.out.println();
         System.out.println("Enter student details:");
-        String name = askInput("Name: ");
-        String gender = askInput("Gender: ");
-        String degreeProgram = askInput("Degree program: ");
-        int studentNo = askInput("Student number: ", "Please enter a valid number.", INTEGER_CONVERTER);
-        int enrollmentYear = askInput("Enrollment year: ", "Please enter a valid number.", INTEGER_CONVERTER);
-        int enrolledUnits = askInput("Enrolled units: ", "Please enter a valid number.", INTEGER_CONVERTER);
-        // TODO: regular vs irregular
-        return new Student(name, gender, degreeProgram, studentNo, enrollmentYear, enrolledUnits);
+        String name = askValidInput("Name: ");
+        String gender = askValidInput("Gender: ");
+        String degreeProgram = askValidInput("Degree program: ");
+        int studentNo = askValidInteger("Student number: ", "Please enter a valid number.");
+        int enrollmentYear = askValidInteger("Enrollment year: ", "Please enter a valid number.");
+        int enrolledUnits = askValidInteger("Enrolled units: ", "Please enter a valid number.");
+        // You can later extend this to allow for selecting Regular or Irregular student
+        return new RegularStudent(name, gender, degreeProgram, studentNo, enrollmentYear, enrolledUnits);
     }
 
-    public static void displayStudent(Student student, String prefix) {
-        System.out.println(prefix + "Student Number: " + student.getStudentNo());
-        System.out.println(prefix + "Name: " + student.getName());
-        System.out.println(prefix + "Gender: " + student.getGender());
-        System.out.println(prefix + "Degree Program: " + student.getDegreeProgram());
-        System.out.println(prefix + "Enrollment Year: " + student.getEnrollmentYear());
-        System.out.println(prefix + "Enrolled Units: " + student.getEnrolledUnits());
-    }
-
-    public static Function<String, Boolean> BOOLEAN_CONVERTER = input -> switch (input.toLowerCase(Locale.ROOT)) {
-        case "y", "yes", "true" -> true;
-        case "n", "no", "false" -> false;
-        default -> null;
-    };
-    public static Function<String, Integer> INTEGER_CONVERTER = input -> {
-        try {
-            return Integer.parseInt(input);
-        } catch (NumberFormatException e) {
-            // Not a number; we ignore it.
-            return null;
+    // Search by student number
+    public static Student searchByStudentNo(int studentNo) {
+        for (Student student : students) {
+            if (student.getStudentNo() == studentNo) {
+                return student;
+            }
         }
-    };
-
-    public static String askInput(String prompt) {
-        return askInput(prompt, "!!!", Function.identity());
+        return null;
     }
 
-    public static <T> T askInput(String prompt, String errorMessage, Function<String, T> converter) {
-        T ret;
+    // Filter students by enrollment year
+    public static List<Student> filterByEnrollmentYear(int year) {
+        List<Student> filteredStudents = new ArrayList<>();
+        for (Student student : students) {
+            if (student.getEnrollmentYear() == year) {
+                filteredStudents.add(student);
+            }
+        }
+        return filteredStudents;
+    }
+
+    // Input validation methods
+    public static String askValidInput(String prompt) {
+        String input;
         do {
             System.out.print(prompt);
-            String line = INPUT.nextLine();
-            ret = converter.apply(line);
-            if (ret == null) {
+            input = INPUT.nextLine();
+        } while (input.isEmpty());
+        return input;
+    }
+
+    public static int askValidInteger(String prompt, String errorMessage) {
+        Integer number = null;
+        while (number == null) {
+            System.out.print(prompt);
+            try {
+                number = Integer.parseInt(INPUT.nextLine());
+            } catch (NumberFormatException e) {
                 System.out.println(errorMessage);
             }
-        } while (ret == null);
-        return ret;
+        }
+        return number;
     }
 }

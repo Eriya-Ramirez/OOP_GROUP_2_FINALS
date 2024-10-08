@@ -1,4 +1,3 @@
-
 public class Student {
     private String name, gender, degreeProgram;
     private int studentNo, enrollmentYear, enrolledUnits;
@@ -12,18 +11,6 @@ public class Student {
         this.enrolledUnits = enrolledUnits;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public String getDegreeProgram() {
-        return degreeProgram;
-    }
-
     public int getStudentNo() {
         return studentNo;
     }
@@ -32,7 +19,13 @@ public class Student {
         return enrollmentYear;
     }
 
-    public int getEnrolledUnits() {
-        return enrolledUnits;
+    public void showDetails() {
+        System.out.println("Student Number: " + studentNo);
+        System.out.println("Name: " + name);
+        System.out.println("Gender: " + gender);
+        System.out.println("Degree Program: " + degreeProgram);
+        System.out.println("Enrollment Year: " + enrollmentYear);
+        System.out.println("Enrolled Units: " + enrolledUnits);
+        System.out.println();
     }
 }

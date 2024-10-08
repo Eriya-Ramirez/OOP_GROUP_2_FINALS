@@ -12,11 +12,12 @@ public class IrregularStudent extends Student {
         this.blockSections.add(section);
     }
 
-    public void removeBlockSection(BlockSection section) {
-        this.blockSections.remove(section);
-    }
-
-    public List<BlockSection> getBlockSections() {
-        return this.blockSections;
+    @Override
+    public void showDetails() {
+        super.showDetails();
+        System.out.println("Block Sections:");
+        for (BlockSection section : blockSections) {
+            System.out.println("- " + section.getBlockName());
+        }
     }
 }

@@ -5,11 +5,15 @@ public class RegularStudent extends Student {
         super(name, gender, degreeProgram, studentNo, enrollmentYear, enrolledUnits);
     }
 
-    public BlockSection getBlockSection() {
-        return blockSection;
-    }
-
     public void setBlockSection(BlockSection blockSection) {
         this.blockSection = blockSection;
+    }
+
+    @Override
+    public void showDetails() {
+        super.showDetails();  // Call parent method
+        if (blockSection != null) {
+            System.out.println("Block Section: " + blockSection.getBlockName());
+        }
     }
 }
