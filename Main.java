@@ -30,6 +30,8 @@ public class Main {
                         (3) Search by student number
                         (4) Filter by enrollment year
                         (5) Display all students
+                    
+                        (6) Add a course
                         (E) Exit program
                     """);
 
@@ -81,6 +83,21 @@ public class Main {
                     student.showDetails();
                 }
             }, "5");
+            // Add a course
+            choice.addChoice(() -> {
+                // TODO: refactor into separate method
+
+                System.out.println();
+                System.out.println("Enter course details:");
+                String code = askValidInput("Course code: ");
+                String name = askValidInput("Course name: ");
+                String department = askValidInput("Department: ");
+                int units = askValidInteger("Credit units: ", "Please enter a valid number");
+
+                Course course = new Course(code, name, department, units);
+                courses.add(course);
+                System.out.println("Added new course!");
+            }, "6");
 
             String input = choice.run();
 
