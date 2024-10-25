@@ -6,8 +6,8 @@ import java.util.List;
 public class IrregularStudent extends Student {
     private final List<BlockSection> blockSections = new ArrayList<>();
 
-    public IrregularStudent(String name, String gender, String degreeProgram, int studentNo, int enrollmentYear, int enrolledUnits) {
-        super(name, gender, degreeProgram, studentNo, enrollmentYear, enrolledUnits);
+    public IrregularStudent(String name, String gender, String degreeProgram, int studentNo, int enrollmentYear) {
+        super(name, gender, degreeProgram, studentNo, enrollmentYear);
     }
 
     public void addBlockSection(BlockSection section) {

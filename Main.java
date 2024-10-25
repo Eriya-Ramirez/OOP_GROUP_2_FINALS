@@ -94,7 +94,6 @@ public class Main {
         String degreeProgram = askValidInput("Degree program: ");
         int studentNo = askValidInteger("data.Student number: ", "Please enter a valid number.");
         int enrollmentYear = askValidInteger("Enrollment year: ", "Please enter a valid number.");
-        int enrolledUnits = askValidInteger("Enrolled units: ", "Please enter a valid number.");
 
         String irregularInput = ChoiceDisplay.begin("Is this student an irregular student? [y/n]: ")
                 .setIgnoreCase(true)
@@ -107,9 +106,9 @@ public class Main {
         };
 
         if (isIrregular) {
-            return new IrregularStudent(name, gender, degreeProgram, studentNo, enrollmentYear, enrolledUnits);
+            return new IrregularStudent(name, gender, degreeProgram, studentNo, enrollmentYear);
         } else {
-            return new RegularStudent(name, gender, degreeProgram, studentNo, enrollmentYear, enrolledUnits);
+            return new RegularStudent(name, gender, degreeProgram, studentNo, enrollmentYear);
         }
     }
 

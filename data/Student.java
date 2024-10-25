@@ -4,13 +4,12 @@ public class Student {
     private String name, gender, degreeProgram;
     private int studentNo, enrollmentYear, enrolledUnits;
 
-    public Student(String name, String gender, String degreeProgram, int studentNo, int enrollmentYear, int enrolledUnits) {
+    public Student(String name, String gender, String degreeProgram, int studentNo, int enrollmentYear) {
         this.name = name;
         this.gender = gender;
         this.degreeProgram = degreeProgram;
         this.studentNo = studentNo;
         this.enrollmentYear = enrollmentYear;
-        this.enrolledUnits = enrolledUnits;
     }
 
     public int getStudentNo() {
@@ -27,7 +26,6 @@ public class Student {
         System.out.println("Gender: " + gender);
         System.out.println("Degree Program: " + degreeProgram);
         System.out.println("Enrollment Year: " + enrollmentYear);
-        System.out.println("Enrolled Units: " + enrolledUnits);
         System.out.println();
     }
 }

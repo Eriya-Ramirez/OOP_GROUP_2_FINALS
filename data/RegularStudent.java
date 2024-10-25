@@ -3,8 +3,8 @@ package data;
 public class RegularStudent extends Student {
     private BlockSection blockSection;
 
-    public RegularStudent(String name, String gender, String degreeProgram, int studentNo, int enrollmentYear, int enrolledUnits) {
-        super(name, gender, degreeProgram, studentNo, enrollmentYear, enrolledUnits);
+    public RegularStudent(String name, String gender, String degreeProgram, int studentNo, int enrollmentYear) {
+        super(name, gender, degreeProgram, studentNo, enrollmentYear);
     }
 
     public void setBlockSection(BlockSection blockSection) {
