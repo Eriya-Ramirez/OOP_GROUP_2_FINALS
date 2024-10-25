@@ -33,12 +33,14 @@ public abstract class Student {
         return coursesToGrades;
     }
 
-    public void addCourse(Course course) {
-        setCourseGrade(course, 0F);
-    }
-
     public void setCourseGrade(Course course, float grade) {
         coursesToGrades.put(course, grade);
+    }
+
+    public void addCourses(BlockSection section) {
+        for (Course course : section.getCourses()) {
+            coursesToGrades.putIfAbsent(course, 0F);
+        }
     }
 
     public int getEnrolledUnits() {

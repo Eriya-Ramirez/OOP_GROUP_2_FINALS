@@ -29,9 +29,9 @@ public class Main {
                         (5) Display all students
                     
                         (6) Add a block section
-                        (7) Enroll student in block section
-                        (8) Add student to course
-                        (9) Remove student from course
+                        (7) Add irregular student to block section
+                        (8) Enroll student to course
+                        (9) Un-enroll student from course
                         (10) Change course grades for student
                     
                         (11) Calculate per-unit fees for student
@@ -100,7 +100,24 @@ public class Main {
                 System.out.println("Added a block section!");
             }, "6");
             choice.addChoice(() -> {
+                System.out.println("Adding irregular student to a block section.");
+                Student student = inputStudent();
+                if (student == null) return;
 
+                if (!(student instanceof IrregularStudent irregular)) {
+                    System.out.println("Cannot add regular student in another block section!");
+                    return;
+                }
+
+                BlockSection section = inputSection();
+                if (section == null) return;
+
+                irregular.addBlockSection(section);
+                if (askBoolean("Enroll student in same courses as the section? [y/n]: ")) {
+                    student.addCourses(section);
+                }
+
+                System.out.println("Added student in block section!");
             }, "7");
             choice.addChoice(() -> {
 
@@ -112,17 +129,8 @@ public class Main {
 
             }, "10");
             choice.addChoice(() -> {
-
-                Student student;
-                do {
-                    int input = askValidInteger("Student number: ", "Please enter a valid number.");
-                    student = students.stream().filter(st -> st.getStudentNo() == input).findFirst().orElse(null);
-                    if (student == null) {
-                        if (!askBoolean("No student with that number found. Try again? [y/n]:")) {
-                            return;
-                        }
-                    }
-                } while (student == null);
+                Student student = inputStudent();
+                if (student == null) return;
 
                 int feePerUnit = askValidInteger("Fee per credit unit: ", "Please enter a valid number.");
 
@@ -159,23 +167,13 @@ public class Main {
             return new IrregularStudent(name, gender, degreeProgram, studentNo, enrollmentYear);
         } else {
             // Regular student
-            BlockSection section;
-            do {
-                String input = askValidInput("Block section: ");
-                section = blockSections.stream().filter(sec -> sec.getName().equalsIgnoreCase(input)).findFirst().orElse(null);
-                if (section == null) {
-                    if (!askBoolean("This block section does not exist. Try again? [y/n]:")) {
-                        return null;
-                    }
-                }
-            } while (section == null);
+            BlockSection section = inputSection();
+            if (section == null) return null;
 
             RegularStudent student = new RegularStudent(name, gender, degreeProgram, studentNo, enrollmentYear, section);
 
             // Copy courses from section to student
-            for (Course course : section.getCourses()) {
-                student.addCourse(course);
-            }
+            student.addCourses(section);
 
             return student;
         }
@@ -207,6 +205,34 @@ public class Main {
         String schedule = askValidInput("Course schedule: ");
         int units = askValidInteger("Credit units: ", "Please enter a valid number.");
         return new Course(code, units, schedule);
+    }
+
+    public static Student inputStudent() {
+        Student student;
+        do {
+            int input = askValidInteger("Student number: ", "Please enter a valid number.");
+            student = students.stream().filter(st -> st.getStudentNo() == input).findFirst().orElse(null);
+            if (student == null) {
+                if (!askBoolean("No student with that number found. Try again? [y/n]:")) {
+                    break;
+                }
+            }
+        } while (student == null);
+        return student;
+    }
+
+    public static BlockSection inputSection() {
+        BlockSection section;
+        do {
+            String input = askValidInput("Block section: ");
+            section = blockSections.stream().filter(sec -> sec.getName().equalsIgnoreCase(input)).findFirst().orElse(null);
+            if (section == null) {
+                if (!askBoolean("This block section does not exist. Try again? [y/n]:")) {
+                    return null;
+                }
+            }
+        } while (section == null);
+        return section;
     }
 
     // Input validation methods
