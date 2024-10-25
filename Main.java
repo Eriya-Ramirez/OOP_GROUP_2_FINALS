@@ -1,4 +1,5 @@
 import data.BlockSection;
+import data.Course;
 import data.IrregularStudent;
 import data.RegularStudent;
 import data.Student;
@@ -87,6 +88,28 @@ public class Main {
                 }
             }, "5");
             choice.addChoice(() -> {
+                System.out.println("Adding a block section.");
+                String name = askValidInput("Section name: ");
+                BlockSection section = new BlockSection(name);
+                while (askBoolean("Add a course to this section? [y/n]: ")) {
+                    section.addCourse(inputCourse());
+                }
+                blockSections.add(section);
+                System.out.println("Added a block section!");
+            }, "6");
+            choice.addChoice(() -> {
+
+            }, "7");
+            choice.addChoice(() -> {
+
+            }, "8");
+            choice.addChoice(() -> {
+
+            }, "9");
+            choice.addChoice(() -> {
+
+            }, "10");
+            choice.addChoice(() -> {
 
                 Student student;
                 do {
@@ -173,6 +196,13 @@ public class Main {
             }
         } while (section == null);
         return section;
+    }
+
+    public static Course inputCourse() {
+        String code = askValidInput("Course code: ");
+        String schedule = askValidInput("Course schedule: ");
+        int units = askValidInteger("Credit units: ", "Please enter a valid number.");
+        return new Course(code, units, schedule);
     }
 
     // Input validation methods
