@@ -1,8 +1,10 @@
+import data.IrregularStudent;
+import data.RegularStudent;
+import data.Student;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Scanner;
-import java.util.function.Function;
 
 public class Main {
     public static final Scanner INPUT = new Scanner(System.in);
@@ -50,10 +52,10 @@ public class Main {
                 int targetNumber = askValidInteger("Enter student number to search: ", "Please input a valid number.");
                 Student student = searchByStudentNo(targetNumber);
                 if (student != null) {
-                    System.out.println("Student found:");
+                    System.out.println("data.Student found:");
                     student.showDetails();
                 } else {
-                    System.out.println("Student not found.");
+                    System.out.println("data.Student not found.");
                 }
             }, "3");
             // Filter by enrollment year
@@ -90,7 +92,7 @@ public class Main {
         String name = askValidInput("Name: ");
         String gender = askValidInput("Gender: ");
         String degreeProgram = askValidInput("Degree program: ");
-        int studentNo = askValidInteger("Student number: ", "Please enter a valid number.");
+        int studentNo = askValidInteger("data.Student number: ", "Please enter a valid number.");
         int enrollmentYear = askValidInteger("Enrollment year: ", "Please enter a valid number.");
         int enrolledUnits = askValidInteger("Enrolled units: ", "Please enter a valid number.");
 

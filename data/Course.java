@@ -1,3 +1,5 @@
+package data;
+
 public class Course {
     private final String code, name, department;
     private final int units;

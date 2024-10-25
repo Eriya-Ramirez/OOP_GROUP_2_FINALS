@@ -1,3 +1,5 @@
+package data;
+
 public class RegularStudent extends Student {
     private BlockSection blockSection;
 

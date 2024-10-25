@@ -1,3 +1,5 @@
+package data;
+
 public class Student {
     private String name, gender, degreeProgram;
     private int studentNo, enrollmentYear, enrolledUnits;
@@ -20,7 +22,7 @@ public class Student {
     }
 
     public void showDetails() {
-        System.out.println("Student Number: " + studentNo);
+        System.out.println("data.Student Number: " + studentNo);
         System.out.println("Name: " + name);
         System.out.println("Gender: " + gender);
         System.out.println("Degree Program: " + degreeProgram);
