@@ -15,6 +15,10 @@ public class BlockSection {
         return name;
     }
 
+    public boolean containsCourse(String code) {
+        return courses.stream().anyMatch(c -> c.getCode().equalsIgnoreCase(code));
+    }
+
     public List<Course> getCourses() {
         return courses;
     }

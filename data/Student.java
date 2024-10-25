@@ -33,15 +33,24 @@ public abstract class Student {
         return coursesToGrades;
     }
 
+    public void addCourse(Course course) {
+        coursesToGrades.putIfAbsent(course, 0F);
+    }
+
     public void setCourseGrade(Course course, float grade) {
         coursesToGrades.put(course, grade);
     }
 
     public void addCourses(BlockSection section) {
         for (Course course : section.getCourses()) {
-            coursesToGrades.putIfAbsent(course, 0F);
+            addCourse(course);
         }
     }
+
+    public boolean containsCourse(String code) {
+        return coursesToGrades.keySet().stream().anyMatch(c -> c.getCode().equalsIgnoreCase(code));
+    }
+
 
     public int getEnrolledUnits() {
         return coursesToGrades.keySet().stream().mapToInt(Course::getUnits).sum();

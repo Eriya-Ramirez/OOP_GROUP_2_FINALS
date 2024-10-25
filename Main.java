@@ -30,7 +30,7 @@ public class Main {
                     
                         (6) Add a block section
                         (7) Add irregular student to block section
-                        (8) Enroll student to course
+                        (8) Enroll irregular student to course
                         (9) Un-enroll student from course
                         (10) Change course grades for student
                     
@@ -94,7 +94,14 @@ public class Main {
                 String name = askValidInput("Section name: ");
                 BlockSection section = new BlockSection(name);
                 while (askBoolean("Add a course to this section? [y/n]: ")) {
-                    section.addCourse(inputCourse());
+                    String code = askValidInput("Course code: ");
+                    if (section.containsCourse(code)) {
+                        System.out.println("Cannot duplicate a course with that code!");
+                        continue;
+                    }
+                    String schedule = askValidInput("Course schedule: ");
+                    int units = askValidInteger("Credit units: ", "Please enter a valid number.");
+                    section.addCourse(new Course(code, units, schedule));
                 }
                 blockSections.add(section);
                 System.out.println("Added a block section!");
@@ -120,6 +127,26 @@ public class Main {
                 System.out.println("Added student in block section!");
             }, "7");
             choice.addChoice(() -> {
+                System.out.println("Enroll irregular student in course.");
+                Student student = inputStudent();
+                if (student == null) return;
+
+                if (student instanceof RegularStudent) {
+                    System.out.println("Cannot enroll student in another course!");
+                    return;
+                }
+
+                String code = askValidInput("Course code: ");
+                if (student.containsCourse(code)) {
+                    System.out.println("Cannot enroll student in duplicate course!");
+                    return;
+                }
+
+                String schedule = askValidInput("Course schedule: ");
+                int units = askValidInteger("Credit units: ", "Please enter a valid number.");
+                Course course = new Course(code, units, schedule);
+                student.addCourse(course);
+                System.out.println("Enrolled student in course!");
 
             }, "8");
             choice.addChoice(() -> {
