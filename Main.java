@@ -108,18 +108,7 @@ public class Main {
             return new IrregularStudent(name, gender, degreeProgram, studentNo, enrollmentYear);
         } else {
             // Regular student
-            BlockSection section;
-            do {
-                String input = askValidInput("Block section: ");
-                section = blockSections.stream().filter(sec -> sec.getBlockName().equalsIgnoreCase(input)).findFirst().orElse(null);
-                if (section == null) {
-                    if (askBoolean("This block section does not exist yet. Create it? [y/n]:")) {
-                        section = new BlockSection(input);
-                        blockSections.add(section);
-                    }
-                }
-            } while (section == null);
-
+            BlockSection section = askBlockSection();
             return new RegularStudent(name, gender, degreeProgram, studentNo, enrollmentYear, section);
         }
     }
@@ -143,6 +132,21 @@ public class Main {
             }
         }
         return filteredStudents;
+    }
+
+    public static BlockSection askBlockSection() {
+        BlockSection section;
+        do {
+            String input = askValidInput("Block section: ");
+            section = blockSections.stream().filter(sec -> sec.getBlockName().equalsIgnoreCase(input)).findFirst().orElse(null);
+            if (section == null) {
+                if (askBoolean("This block section does not exist yet. Create it? [y/n]:")) {
+                    section = new BlockSection(input);
+                    blockSections.add(section);
+                }
+            }
+        } while (section == null);
+        return section;
     }
 
     // Input validation methods
