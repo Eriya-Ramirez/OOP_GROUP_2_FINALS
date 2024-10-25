@@ -1,7 +1,7 @@
 package data;
 
 public class RegularStudent extends Student {
-    private BlockSection blockSection;
+    private final BlockSection blockSection;
 
     public RegularStudent(String name, String gender, String degreeProgram, int studentNo, int enrollmentYear, BlockSection blockSection) {
         super(name, gender, degreeProgram, studentNo, enrollmentYear);
