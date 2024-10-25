@@ -32,6 +32,7 @@ public class Main {
                         (5) Display all students
                     
                         (6) Add a course
+                        (7) Create a new class for a course
                         (E) Exit program
                     """);
 
@@ -98,6 +99,30 @@ public class Main {
                 courses.add(course);
                 System.out.println("Added new course!");
             }, "6");
+            choice.addChoice(() -> {
+                // TODO: refactor into separate method
+
+                System.out.println();
+                System.out.println("Enter class details:");
+
+                Course course;
+                do {
+                    String input = askValidInput("Course code: ");
+                    course = courses.stream().filter(co -> co.getCode().equalsIgnoreCase(input)).findFirst().orElse(null);
+                    if (course == null) {
+                        if (!askBoolean("No course with that code found. Try again? [y/n]:")) {
+                            return;
+                        }
+                    }
+                } while (course == null);
+                int classCode = askValidInteger("Class code: ", "Please enter a valid number.");
+                String instructor = askValidInput("Instructor name: ");
+                BlockSection blockSection = askBlockSection();
+
+                CourseClass courseClass = new CourseClass(course, classCode, instructor, blockSection);
+                courseClasses.add(courseClass);
+                System.out.println("Created a class for a course!");
+            }, "7");
 
             String input = choice.run();
 
