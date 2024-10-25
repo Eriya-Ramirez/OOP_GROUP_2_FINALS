@@ -77,6 +77,7 @@ public class Main {
                 System.out.println("Found " + filteredStudents.size() + " students enrolled in " + year + ":");
                 for (Student student : filteredStudents) {
                     student.showDetails();
+                    System.out.println("Enrolled units: " + calculateUnits(student));
                 }
             }, "4");
             // Display all students
@@ -84,6 +85,7 @@ public class Main {
                 System.out.println("Displaying " + students.size() + " students:");
                 for (Student student : students) {
                     student.showDetails();
+                    System.out.println("Enrolled units: " + calculateUnits(student));
                 }
             }, "5");
             // Add a course
@@ -224,6 +226,14 @@ public class Main {
             }
         }
         return filteredStudents;
+    }
+
+    public static int calculateUnits(Student student) {
+        // Find all classes the student is enrolled in, and sum up their units
+        return courseClasses.stream()
+                .filter(cls -> cls.getStudents().contains(student))
+                .mapToInt(cls -> cls.getInfo().getUnits())
+                .sum();
     }
 
     public static BlockSection askBlockSection() {
