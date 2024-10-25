@@ -1,6 +1,4 @@
 import data.BlockSection;
-import data.Course;
-import data.CourseClass;
 import data.IrregularStudent;
 import data.RegularStudent;
 import data.Student;
@@ -13,8 +11,6 @@ import java.util.Scanner;
 public class Main {
     public static final Scanner INPUT = new Scanner(System.in);
     private static final List<Student> students = new ArrayList<>();
-    private static final List<Course> courses = new ArrayList<>();
-    private static final List<CourseClass> courseClasses = new ArrayList<>();
     private static final List<BlockSection> blockSections = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -31,9 +27,6 @@ public class Main {
                         (4) Filter by enrollment year
                         (5) Display all students
                     
-                        (6) Add a course
-                        (7) Create a new class for a course
-                        (8) Enroll a student in a course class
                         (9) Calculate per-unit fees for student
                     
                         (E) Exit program
@@ -78,7 +71,6 @@ public class Main {
                 System.out.println("Found " + filteredStudents.size() + " students enrolled in " + year + ":");
                 for (Student student : filteredStudents) {
                     student.showDetails();
-                    System.out.println("Enrolled units: " + calculateUnits(student));
                 }
             }, "4");
             // Display all students
@@ -86,94 +78,8 @@ public class Main {
                 System.out.println("Displaying " + students.size() + " students:");
                 for (Student student : students) {
                     student.showDetails();
-                    System.out.println("Enrolled units: " + calculateUnits(student));
                 }
             }, "5");
-            // Add a course
-            choice.addChoice(() -> {
-                // TODO: refactor into separate method
-
-                System.out.println();
-                System.out.println("Enter course details:");
-                String code = askValidInput("Course code: ");
-                String name = askValidInput("Course name: ");
-                String department = askValidInput("Department: ");
-                int units = askValidInteger("Credit units: ", "Please enter a valid number");
-
-                Course course = new Course(code, name, department, units);
-                courses.add(course);
-                System.out.println("Added new course!");
-            }, "6");
-            choice.addChoice(() -> {
-                // TODO: refactor into separate method
-
-                System.out.println();
-                System.out.println("Enter class details:");
-
-                Course course;
-                do {
-                    String input = askValidInput("Course code: ");
-                    course = courses.stream().filter(co -> co.getCode().equalsIgnoreCase(input)).findFirst().orElse(null);
-                    if (course == null) {
-                        if (!askBoolean("No course with that code found. Try again? [y/n]:")) {
-                            return;
-                        }
-                    }
-                } while (course == null);
-                int classCode = askValidInteger("Class code: ", "Please enter a valid number.");
-                String instructor = askValidInput("Instructor name: ");
-                BlockSection blockSection = askBlockSection();
-
-                CourseClass courseClass = new CourseClass(course, classCode, instructor, blockSection);
-                courseClasses.add(courseClass);
-                System.out.println("Created a class for a course!");
-            }, "7");
-            choice.addChoice(() -> {
-                // TODO: refactor into separate method
-
-                System.out.println();
-                System.out.println("Enter details of student and course:");
-
-                Student student;
-                do {
-                    int input = askValidInteger("Student number: ", "Please enter a valid number.");
-                    student = students.stream().filter(st -> st.getStudentNo() == input).findFirst().orElse(null);
-                    if (student == null) {
-                        if (!askBoolean("No student with that number found. Try again? [y/n]:")) {
-                            return;
-                        }
-                    }
-                } while (student == null);
-
-                CourseClass courseClass;
-                do {
-                    int input = askValidInteger("Class code: ", "Please enter a valid number.");
-                    courseClass = courseClasses.stream().filter(co -> co.getClassCode() == input).findFirst().orElse(null);
-                    if (courseClass == null) {
-                        if (!askBoolean("No course with that code found. Try again? [y/n]:")) {
-                            return;
-                        }
-                    }
-                } while (courseClass == null);
-                BlockSection assigned = courseClass.getAssignedSection();
-
-                if (student instanceof RegularStudent regular && !regular.getBlockSection().equals(assigned)) {
-                    System.out.println("Cannot enroll regular student in this class.");
-                    System.out.println("Student's section is " + regular.getBlockSection() + " while this class is for " + assigned + ".");
-                    return;
-                }
-
-                if (student instanceof IrregularStudent irregular) {
-                    if (!irregular.getBlockSections().contains(assigned)) {
-                        System.out.println("Adding irregular student to section " + assigned + ".");
-                        irregular.addBlockSection(assigned);
-                        assigned.addStudent(irregular);
-                    }
-                }
-
-                courseClass.getStudents().add(student);
-                System.out.println("Added student to course class!");
-            }, "8");
             choice.addChoice(() -> {
 
                 Student student;
@@ -192,8 +98,7 @@ public class Main {
                 System.out.println();
                 student.showDetails();
                 System.out.println();
-                int units = calculateUnits(student);
-                System.out.println("Enrolled units: " + units);
+                int units = student.getEnrolledUnits();
                 System.out.println("Total amount of fees: " + units * feePerUnit);
             }, "9");
 
@@ -224,9 +129,7 @@ public class Main {
         } else {
             // Regular student
             BlockSection section = askBlockSection();
-            RegularStudent student = new RegularStudent(name, gender, degreeProgram, studentNo, enrollmentYear, section);
-            section.addStudent(student);
-            return student;
+            return new RegularStudent(name, gender, degreeProgram, studentNo, enrollmentYear, section);
         }
     }
 
@@ -251,19 +154,11 @@ public class Main {
         return filteredStudents;
     }
 
-    public static int calculateUnits(Student student) {
-        // Find all classes the student is enrolled in, and sum up their units
-        return courseClasses.stream()
-                .filter(cls -> cls.getStudents().contains(student))
-                .mapToInt(cls -> cls.getInfo().getUnits())
-                .sum();
-    }
-
     public static BlockSection askBlockSection() {
         BlockSection section;
         do {
             String input = askValidInput("Block section: ");
-            section = blockSections.stream().filter(sec -> sec.getBlockName().equalsIgnoreCase(input)).findFirst().orElse(null);
+            section = blockSections.stream().filter(sec -> sec.getName().equalsIgnoreCase(input)).findFirst().orElse(null);
             if (section == null) {
                 if (askBoolean("This block section does not exist yet. Create it? [y/n]:")) {
                     section = new BlockSection(input);

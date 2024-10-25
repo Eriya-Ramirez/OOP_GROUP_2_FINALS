@@ -1,29 +1,30 @@
 package data;
 
 public class Course {
-    private final String code, name, department;
+    private final String code;
     private final int units;
+    private final String schedule;
 
-    public Course(String code, String name, String department, int units) {
+    public Course(String code, int units, String schedule) {
         this.code = code;
-        this.name = name;
-        this.department = department;
         this.units = units;
+        this.schedule = schedule;
     }
 
     public String getCode() {
         return code;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getDepartment() {
-        return department;
-    }
-
     public int getUnits() {
         return units;
+    }
+
+    public String getSchedule() {
+        return schedule;
+    }
+
+    @Override
+    public String toString() {
+        return code + " (" + schedule + ")";
     }
 }

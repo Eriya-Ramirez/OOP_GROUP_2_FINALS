@@ -4,32 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BlockSection {
-    private final String blockName;
-    private final List<Student> students;
+    private final String name;
+    private final List<Course> courses = new ArrayList<>();
 
-    public BlockSection(String blockName) {
-        this.blockName = blockName;
-        this.students = new ArrayList<>();
+    public BlockSection(String name) {
+        this.name = name;
     }
 
-    public String getBlockName() {
-        return blockName;
+    public String getName() {
+        return name;
     }
 
-    public void addStudent(Student student) {
-        this.students.add(student);
+    public List<Course> getCourses() {
+        return courses;
     }
 
-    public void removeStudent(Student student) {
-        this.students.remove(student);
-    }
-
-    public List<Student> getStudents() {
-        return this.students;
-    }
-
-    @Override
-    public String toString() {
-        return blockName;
+    public void addCourse(Course course) {
+        this.courses.add(course);
     }
 }

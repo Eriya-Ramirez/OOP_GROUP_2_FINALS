@@ -23,7 +23,7 @@ public class IrregularStudent extends Student {
         super.showDetails();
         System.out.println("Block Sections:");
         for (BlockSection section : blockSections) {
-            System.out.println("- " + section.getBlockName());
+            System.out.println("- " + section.getName());
         }
     }
 }
