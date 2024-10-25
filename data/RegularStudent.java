@@ -8,6 +8,10 @@ public class RegularStudent extends Student {
         this.blockSection = blockSection;
     }
 
+    public BlockSection getBlockSection() {
+        return blockSection;
+    }
+
     public void setBlockSection(BlockSection blockSection) {
         this.blockSection = blockSection;
     }

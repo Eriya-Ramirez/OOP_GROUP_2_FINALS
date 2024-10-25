@@ -33,6 +33,8 @@ public class Main {
                     
                         (6) Add a course
                         (7) Create a new class for a course
+                        (8) Enroll a student in a course class
+                    
                         (E) Exit program
                     """);
 
@@ -123,6 +125,52 @@ public class Main {
                 courseClasses.add(courseClass);
                 System.out.println("Created a class for a course!");
             }, "7");
+            choice.addChoice(() -> {
+                // TODO: refactor into separate method
+
+                System.out.println();
+                System.out.println("Enter details of student and course:");
+
+                Student student;
+                do {
+                    int input = askValidInteger("Student number: ", "Please enter a valid number.");
+                    student = students.stream().filter(st -> st.getStudentNo() == input).findFirst().orElse(null);
+                    if (student == null) {
+                        if (!askBoolean("No student with that number found. Try again? [y/n]:")) {
+                            return;
+                        }
+                    }
+                } while (student == null);
+
+                CourseClass courseClass;
+                do {
+                    int input = askValidInteger("Class code: ", "Please enter a valid number.");
+                    courseClass = courseClasses.stream().filter(co -> co.getClassCode() == input).findFirst().orElse(null);
+                    if (courseClass == null) {
+                        if (!askBoolean("No course with that code found. Try again? [y/n]:")) {
+                            return;
+                        }
+                    }
+                } while (courseClass == null);
+                BlockSection assigned = courseClass.getAssignedSection();
+
+                if (student instanceof RegularStudent regular && !regular.getBlockSection().equals(assigned)) {
+                    System.out.println("Cannot enroll regular student in this class.");
+                    System.out.println("Student's section is " + regular.getBlockSection() + " while this class is for " + assigned + ".");
+                    return;
+                }
+
+                if (student instanceof IrregularStudent irregular) {
+                    if (!irregular.getBlockSections().contains(assigned)) {
+                        System.out.println("Adding irregular student to section " + assigned + ".");
+                        irregular.addBlockSection(assigned);
+                        assigned.addStudent(irregular);
+                    }
+                }
+
+                courseClass.getStudents().add(student);
+                System.out.println("Added student to course class!");
+            }, "8");
 
             String input = choice.run();
 
@@ -151,7 +199,9 @@ public class Main {
         } else {
             // Regular student
             BlockSection section = askBlockSection();
-            return new RegularStudent(name, gender, degreeProgram, studentNo, enrollmentYear, section);
+            RegularStudent student = new RegularStudent(name, gender, degreeProgram, studentNo, enrollmentYear, section);
+            section.addStudent(student);
+            return student;
         }
     }
 

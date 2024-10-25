@@ -27,4 +27,9 @@ public class BlockSection {
     public List<Student> getStudents() {
         return this.students;
     }
+
+    @Override
+    public String toString() {
+        return blockName;
+    }
 }

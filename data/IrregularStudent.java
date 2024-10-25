@@ -10,6 +10,10 @@ public class IrregularStudent extends Student {
         super(name, gender, degreeProgram, studentNo, enrollmentYear);
     }
 
+    public List<BlockSection> getBlockSections() {
+        return blockSections;
+    }
+
     public void addBlockSection(BlockSection section) {
         this.blockSections.add(section);
     }
