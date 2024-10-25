@@ -1,14 +1,21 @@
+import data.BlockSection;
+import data.Course;
+import data.CourseClass;
 import data.IrregularStudent;
 import data.RegularStudent;
 import data.Student;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Main {
     public static final Scanner INPUT = new Scanner(System.in);
     private static final List<Student> students = new ArrayList<>();
+    private static final List<Course> courses = new ArrayList<>();
+    private static final List<CourseClass> courseClasses = new ArrayList<>();
+    private static final List<BlockSection> blockSections = new ArrayList<>();
 
     public static void main(String[] args) {
         boolean running = true;
@@ -92,23 +99,28 @@ public class Main {
         String name = askValidInput("Name: ");
         String gender = askValidInput("Gender: ");
         String degreeProgram = askValidInput("Degree program: ");
-        int studentNo = askValidInteger("data.Student number: ", "Please enter a valid number.");
+        int studentNo = askValidInteger("Student number: ", "Please enter a valid number.");
         int enrollmentYear = askValidInteger("Enrollment year: ", "Please enter a valid number.");
 
-        String irregularInput = ChoiceDisplay.begin("Is this student an irregular student? [y/n]: ")
-                .setIgnoreCase(true)
-                .acknowledgeChoice("yes", "y")
-                .acknowledgeChoice("no", "n")
-                .run();
-        boolean isIrregular = switch (irregularInput) {
-            case "yes", "y" -> true;
-            default -> false;
-        };
+        boolean isIrregular = askBoolean("Is this student an irregular student? [y/n]: ");
 
         if (isIrregular) {
             return new IrregularStudent(name, gender, degreeProgram, studentNo, enrollmentYear);
         } else {
-            return new RegularStudent(name, gender, degreeProgram, studentNo, enrollmentYear);
+            // Regular student
+            BlockSection section;
+            do {
+                String input = askValidInput("Block section: ");
+                section = blockSections.stream().filter(sec -> sec.getBlockName().equalsIgnoreCase(input)).findFirst().orElse(null);
+                if (section == null) {
+                    if (askBoolean("This block section does not exist yet. Create it? [y/n]:")) {
+                        section = new BlockSection(input);
+                        blockSections.add(section);
+                    }
+                }
+            } while (section == null);
+
+            return new RegularStudent(name, gender, degreeProgram, studentNo, enrollmentYear, section);
         }
     }
 
@@ -154,5 +166,22 @@ public class Main {
             }
         }
         return number;
+    }
+
+    public static boolean askBoolean(String prompt) {
+        Boolean result = null;
+        while (result == null) {
+            System.out.print(prompt);
+            String input = INPUT.nextLine().toLowerCase(Locale.ROOT);
+            result = switch (input) {
+                case "yes", "y" -> true;
+                case "no", "n" -> false;
+                default -> {
+                    System.out.println("Invalid choice.");
+                    yield null;
+                }
+            };
+        }
+        return result;
     }
 }
