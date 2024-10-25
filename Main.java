@@ -34,6 +34,7 @@ public class Main {
                         (6) Add a course
                         (7) Create a new class for a course
                         (8) Enroll a student in a course class
+                        (9) Calculate per-unit fees for student
                     
                         (E) Exit program
                     """);
@@ -173,6 +174,28 @@ public class Main {
                 courseClass.getStudents().add(student);
                 System.out.println("Added student to course class!");
             }, "8");
+            choice.addChoice(() -> {
+
+                Student student;
+                do {
+                    int input = askValidInteger("Student number: ", "Please enter a valid number.");
+                    student = students.stream().filter(st -> st.getStudentNo() == input).findFirst().orElse(null);
+                    if (student == null) {
+                        if (!askBoolean("No student with that number found. Try again? [y/n]:")) {
+                            return;
+                        }
+                    }
+                } while (student == null);
+
+                int feePerUnit = askValidInteger("Fee per credit unit: ", "Please enter a valid number.");
+
+                System.out.println();
+                student.showDetails();
+                System.out.println();
+                int units = calculateUnits(student);
+                System.out.println("Enrolled units: " + units);
+                System.out.println("Total amount of fees: " + units * feePerUnit);
+            }, "9");
 
             String input = choice.run();
 
