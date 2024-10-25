@@ -27,7 +27,13 @@ public class Main {
                         (4) Filter by enrollment year
                         (5) Display all students
                     
-                        (9) Calculate per-unit fees for student
+                        (6) Add a block section
+                        (7) Enroll student in block section
+                        (8) Add student to course
+                        (9) Remove student from course
+                        (10) Change course grades for student
+                    
+                        (11) Calculate per-unit fees for student
                     
                         (E) Exit program
                     """);
@@ -100,7 +106,7 @@ public class Main {
                 System.out.println();
                 int units = student.getEnrolledUnits();
                 System.out.println("Total amount of fees: " + units * feePerUnit);
-            }, "9");
+            }, "11");
 
             String input = choice.run();
 
