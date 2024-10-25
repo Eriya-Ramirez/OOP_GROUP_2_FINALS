@@ -1,13 +1,14 @@
 package data;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
 public abstract class Student {
     private String name, gender, degreeProgram;
     private int studentNo, enrollmentYear;
-    private Map<Course, Float> coursesToGrades = new HashMap<>();
+    private Map<Course, Float> coursesToGrades = new LinkedHashMap<>();
 
     public Student(String name, String gender, String degreeProgram, int studentNo, int enrollmentYear) {
         this.name = name;

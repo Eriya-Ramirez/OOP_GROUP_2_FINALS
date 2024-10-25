@@ -150,6 +150,40 @@ public class Main {
 
             }, "8");
             choice.addChoice(() -> {
+                System.out.println("Un-enroll student from course.");
+                Student student = inputStudent();
+                if (student == null) return;
+
+                if (student.getCoursesToGrades().isEmpty()) {
+                    System.out.println("Student is not enrolled in any course!");
+                    return;
+                }
+
+                System.out.println();
+                List<Course> courses = new ArrayList<>(student.getCoursesToGrades().keySet());
+                for (int i = 0; i < courses.size(); i++) {
+                    Course course = courses.get(i);
+                    System.out.printf(" (%s) %s%n", i + 1, course);
+                }
+
+                int input;
+                do {
+                    input = askValidInteger("Select a course above (or 0 to cancel): ", "Please enter a valid selection.");
+                    // Input should be in range of [1, courses.size()], or 0 (to cancel)
+                    if (input == 0) {
+                        return;
+                    }
+
+                    // Out of bounds
+                    if (input > courses.size() || input < 0) {
+                        System.out.println("Please enter a valid selection.");
+                        input = -1;
+                    }
+                } while (input < 0);
+
+                Course course = courses.get(input - 1);
+                student.getCoursesToGrades().remove(course);
+                System.out.println("Un-enrolled student from course.");
 
             }, "9");
             choice.addChoice(() -> {
