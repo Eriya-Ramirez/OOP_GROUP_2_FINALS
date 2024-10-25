@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class Student {
+public abstract class Student {
     private String name, gender, degreeProgram;
     private int studentNo, enrollmentYear;
     private Map<Course, Float> coursesToGrades = new HashMap<>();
@@ -37,13 +37,18 @@ public class Student {
         return coursesToGrades.keySet().stream().mapToInt(Course::getUnits).sum();
     }
 
-    public void showDetails() {
+    public abstract void showDetails();
+
+    protected void showBasicDetails() {
         System.out.println("Student Number: " + studentNo);
         System.out.println("Name: " + name);
         System.out.println("Gender: " + gender);
         System.out.println("Degree Program: " + degreeProgram);
         System.out.println("Enrollment Year: " + enrollmentYear);
         System.out.println("Enrolled Units: " + getEnrolledUnits());
+    }
+
+    protected void showCoursesDetails() {
         if (!coursesToGrades.isEmpty()) {
             System.out.println("Courses: ");
             for (Entry<Course, Float> courseGrade : coursesToGrades.entrySet()) {

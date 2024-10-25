@@ -20,10 +20,11 @@ public class IrregularStudent extends Student {
 
     @Override
     public void showDetails() {
-        super.showDetails();
+        super.showBasicDetails();
         System.out.println("Block Sections:");
         for (BlockSection section : blockSections) {
             System.out.println("- " + section.getName());
         }
+        super.showCoursesDetails();
     }
 }

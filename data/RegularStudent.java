@@ -18,9 +18,10 @@ public class RegularStudent extends Student {
 
     @Override
     public void showDetails() {
-        super.showDetails();
+        super.showCoursesDetails();
         if (blockSection != null) {
             System.out.println("Block Section: " + blockSection.getName());
         }
+        super.showCoursesDetails();
     }
 }
