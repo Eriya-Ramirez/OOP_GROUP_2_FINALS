@@ -12,13 +12,9 @@ public class RegularStudent extends Student {
         return blockSection;
     }
 
-    public void setBlockSection(BlockSection blockSection) {
-        this.blockSection = blockSection;
-    }
-
     @Override
     public void showDetails() {
-        super.showCoursesDetails();
+        super.showBasicDetails();
         if (blockSection != null) {
             System.out.println("Block Section: " + blockSection.getName());
         }
