@@ -93,8 +93,22 @@ public class Main {
         int studentNo = askValidInteger("Student number: ", "Please enter a valid number.");
         int enrollmentYear = askValidInteger("Enrollment year: ", "Please enter a valid number.");
         int enrolledUnits = askValidInteger("Enrolled units: ", "Please enter a valid number.");
-        // You can later extend this to allow for selecting Regular or Irregular student
-        return new RegularStudent(name, gender, degreeProgram, studentNo, enrollmentYear, enrolledUnits);
+
+        String irregularInput = ChoiceDisplay.begin("Is this student an irregular student? [y/n]: ")
+                .setIgnoreCase(true)
+                .acknowledgeChoice("yes", "y")
+                .acknowledgeChoice("no", "n")
+                .run();
+        boolean isIrregular = switch (irregularInput) {
+            case "yes", "y" -> true;
+            default -> false;
+        };
+
+        if (isIrregular) {
+            return new IrregularStudent(name, gender, degreeProgram, studentNo, enrollmentYear, enrolledUnits);
+        } else {
+            return new RegularStudent(name, gender, degreeProgram, studentNo, enrollmentYear, enrolledUnits);
+        }
     }
 
     // Search by student number
