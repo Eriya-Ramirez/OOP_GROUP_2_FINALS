@@ -160,34 +160,39 @@ public class Main {
                 }
 
                 System.out.println();
-                List<Course> courses = new ArrayList<>(student.getCoursesToGrades().keySet());
-                for (int i = 0; i < courses.size(); i++) {
-                    Course course = courses.get(i);
-                    System.out.printf(" (%s) %s%n", i + 1, course);
-                }
+                Course course = selectCourse(student);
+                if (course == null) return;
 
-                int input;
-                do {
-                    input = askValidInteger("Select a course above (or 0 to cancel): ", "Please enter a valid selection.");
-                    // Input should be in range of [1, courses.size()], or 0 (to cancel)
-                    if (input == 0) {
-                        return;
-                    }
-
-                    // Out of bounds
-                    if (input > courses.size() || input < 0) {
-                        System.out.println("Please enter a valid selection.");
-                        input = -1;
-                    }
-                } while (input < 0);
-
-                Course course = courses.get(input - 1);
                 student.getCoursesToGrades().remove(course);
                 System.out.println("Un-enrolled student from course.");
 
             }, "9");
             choice.addChoice(() -> {
+                System.out.println("Change course grades for student.");
+                Student student = inputStudent();
+                if (student == null) return;
 
+                if (student.getCoursesToGrades().isEmpty()) {
+                    System.out.println("Student is not enrolled in any course!");
+                    return;
+                }
+
+                System.out.println();
+                Course course = selectCourse(student);
+                if (course == null) return;
+
+                Float grade = null;
+                do {
+                    System.out.print("Enter a grade: ");
+                    try {
+                        grade = Float.parseFloat(INPUT.nextLine());
+                    } catch (NumberFormatException e) {
+                        System.out.println("Please enter a valid number.");
+                    }
+                } while (grade == null);
+
+                student.setCourseGrade(course, grade);
+                System.out.println("Changed course grade of student.");
             }, "10");
             choice.addChoice(() -> {
                 Student student = inputStudent();
@@ -261,13 +266,6 @@ public class Main {
         return filteredStudents;
     }
 
-    public static Course inputCourse() {
-        String code = askValidInput("Course code: ");
-        String schedule = askValidInput("Course schedule: ");
-        int units = askValidInteger("Credit units: ", "Please enter a valid number.");
-        return new Course(code, units, schedule);
-    }
-
     public static Student inputStudent() {
         Student student;
         do {
@@ -280,6 +278,31 @@ public class Main {
             }
         } while (student == null);
         return student;
+    }
+
+    public static Course selectCourse(Student student) {
+        List<Course> courses = new ArrayList<>(student.getCoursesToGrades().keySet());
+        for (int i = 0; i < courses.size(); i++) {
+            Course course = courses.get(i);
+            System.out.printf(" (%s) %s%n", i + 1, course);
+        }
+
+        int input;
+        do {
+            input = askValidInteger("Select a course above (or 0 to cancel): ", "Please enter a valid selection.");
+            // Input should be in range of [1, courses.size()], or 0 (to cancel)
+            if (input == 0) {
+                return null;
+            }
+
+            // Out of bounds
+            if (input > courses.size() || input < 0) {
+                System.out.println("Please enter a valid selection.");
+                input = -1;
+            }
+        } while (input < 0);
+
+        return courses.get(input - 1);
     }
 
     public static BlockSection inputSection() {
