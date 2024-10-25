@@ -46,8 +46,10 @@ public class Main {
             // Add student
             choice.addChoice(() -> {
                 Student student = addStudent();
-                students.add(student);
-                System.out.println("Added student!");
+                if (student != null) {
+                    students.add(student);
+                    System.out.println("Added student!");
+                }
             }, "1");
             // Remove student
             choice.addChoice(() -> {
@@ -157,8 +159,25 @@ public class Main {
             return new IrregularStudent(name, gender, degreeProgram, studentNo, enrollmentYear);
         } else {
             // Regular student
-            BlockSection section = askBlockSection();
-            return new RegularStudent(name, gender, degreeProgram, studentNo, enrollmentYear, section);
+            BlockSection section;
+            do {
+                String input = askValidInput("Block section: ");
+                section = blockSections.stream().filter(sec -> sec.getName().equalsIgnoreCase(input)).findFirst().orElse(null);
+                if (section == null) {
+                    if (!askBoolean("This block section does not exist. Try again? [y/n]:")) {
+                        return null;
+                    }
+                }
+            } while (section == null);
+
+            RegularStudent student = new RegularStudent(name, gender, degreeProgram, studentNo, enrollmentYear, section);
+
+            // Copy courses from section to student
+            for (Course course : section.getCourses()) {
+                student.addCourse(course);
+            }
+
+            return student;
         }
     }
 
@@ -181,21 +200,6 @@ public class Main {
             }
         }
         return filteredStudents;
-    }
-
-    public static BlockSection askBlockSection() {
-        BlockSection section;
-        do {
-            String input = askValidInput("Block section: ");
-            section = blockSections.stream().filter(sec -> sec.getName().equalsIgnoreCase(input)).findFirst().orElse(null);
-            if (section == null) {
-                if (askBoolean("This block section does not exist yet. Create it? [y/n]:")) {
-                    section = new BlockSection(input);
-                    blockSections.add(section);
-                }
-            }
-        } while (section == null);
-        return section;
     }
 
     public static Course inputCourse() {

@@ -33,6 +33,14 @@ public abstract class Student {
         return coursesToGrades;
     }
 
+    public void addCourse(Course course) {
+        setCourseGrade(course, 0F);
+    }
+
+    public void setCourseGrade(Course course, float grade) {
+        coursesToGrades.put(course, grade);
+    }
+
     public int getEnrolledUnits() {
         return coursesToGrades.keySet().stream().mapToInt(Course::getUnits).sum();
     }
