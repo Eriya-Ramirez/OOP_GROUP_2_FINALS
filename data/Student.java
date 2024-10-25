@@ -59,7 +59,6 @@ public abstract class Student {
         return coursesToGrades.keySet().stream().anyMatch(c -> c.getCode().equalsIgnoreCase(code));
     }
 
-
     public int getEnrolledUnits() {
         return coursesToGrades.keySet().stream().mapToInt(Course::getUnits).sum();
     }
