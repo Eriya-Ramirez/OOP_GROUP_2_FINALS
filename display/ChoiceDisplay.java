@@ -1,3 +1,5 @@
+package display;
+
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -66,7 +68,7 @@ public class ChoiceDisplay {
         boolean validInput = false;
         do {
             System.out.print(prompt);
-            lastInput = normalizeCase(Main.INPUT.nextLine());
+            lastInput = normalizeCase(InputHelpers.INPUT.nextLine());
 
             // Check known choices
             Runnable foundChoice = choices.get(lastInput);
